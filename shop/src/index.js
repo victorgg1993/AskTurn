@@ -17,9 +17,14 @@ ReactDOM.render(
 
       <Router>
         <Switch>
-          
-          <Login path="/" exact component={Login} />
 
+        <Route path="/" exact>
+            <Suspense fallback={'Conectando...'}>
+              <div className="div_login">
+                <Login />
+              </div>
+            </Suspense>
+          </Route>
 
           <Route path="/register">
             <Suspense fallback={'Conectando...'}>
@@ -29,7 +34,6 @@ ReactDOM.render(
             </Suspense>
           </Route>
 
-
           <Route path="/panel">
             <Suspense fallback={'Conectando...'}>
               <div className="div_panel_gestion">
@@ -37,7 +41,6 @@ ReactDOM.render(
               </div>
             </Suspense>
           </Route>
-
 
         </Switch>
       </Router>

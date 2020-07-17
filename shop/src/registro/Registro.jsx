@@ -14,17 +14,22 @@ export default (props) => {
     const [password, setPassword] = useState('');
     const [password_repetit, setPassword_repetit] = useState('');
 
-
+    const esta_vacio = (dato) => {
+        if (dato === "" || dato == null) {
+            return true;
+        }
+        return false;
+    }
 
     const registro = async () => {
 
-        if ((password == null) || (password === "") || (password_repetit == null) || (password_repetit === "")) {
+        if (esta_vacio(password) || esta_vacio(password_repetit)) {
             setMensaje("Error, casilla de password vacío");
         }
         else if (password.length < 6) {
             setMensaje("Error, el password ha de contener 6 o más caracteres");
         }
-        else if ((email == null) || (email === "")) {
+        else if (esta_vacio(email)) {
             setMensaje("Error, casilla de email vacío");
         }
         else {
@@ -60,9 +65,6 @@ export default (props) => {
                 <label htmlFor="password_repetit">Repite password:</label>
                 <input type="password" id="password_repetit" onChange={(evento) => setPassword_repetit(evento.target.value)} />
             </p>
-
-
-
 
             <p>
                 <button onClick={registro} >Registrarse</button>

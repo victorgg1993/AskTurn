@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import 'firebase/auth';
 import { useFirebaseApp, useUser } from 'reactfire';
-import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 export default (props) => {
 
-    const history = useHistory();
     const modulos_firebase = useFirebaseApp();
     const usuario = useUser();
 
-    const volver_login = () => {
-        let path = `/`;
-        history.push(path);
+    const logout = async () => {
+        await modulos_firebase.auth().signOut();
     }
 
     // si el usuario no se ha loggeado, lo enviamos a hacerlo
@@ -21,14 +19,18 @@ export default (props) => {
             {
                 !usuario &&
                 <div>
-                    <p>Lo lamentamos, no ha hecho login, así que todavía no puede entrar aquí</p>
-                    <button onClick={volver_login}>Ir al login</button>
+                    <Redirect to={'/'} />
                 </div>
             }
 
             {
                 usuario &&
-                <p>bienvenido!</p>
+                <div>
+                    <p>bienvenido!</p>
+                    <p>
+                        <button onClick={logout}>Logout</button>
+                    </p>
+                </div>
             }
         </div>
     )

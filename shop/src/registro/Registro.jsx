@@ -21,7 +21,6 @@ export default (props) => {
     const volver_login = () => {
         let path = `/`; 
         history.push(path);
-
     }
 
     return (

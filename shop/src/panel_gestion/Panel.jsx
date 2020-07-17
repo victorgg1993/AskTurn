@@ -32,7 +32,7 @@ export default (props) => {
                     </p>
                 </div>
             }
+
         </div>
     )
 }
-

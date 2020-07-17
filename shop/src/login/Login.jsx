@@ -22,10 +22,10 @@ export default (props) => {
         console.log("falta implementar");
     }
 
-
     return (
         <div>
             <p>login!</p>
+            
             <p>
                 <label htmlFor="email">Correo electrónico:</label>
                 <input type="email" id="email" onChange={(evento) => setEmail(evento.target.value)} />

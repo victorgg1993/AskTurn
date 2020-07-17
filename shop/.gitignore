@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# aquí está todo lo necesario para conectarse a firebase
+/src/configuracion_firebase.js

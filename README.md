@@ -9,3 +9,5 @@ Estructura de directorios:
     + __src__ - Carpeta con el código fuente. Index es el archivo que se encarga de ejecutar el archivo de shop.js.
         + __src/index.js__ - Aquí está la tienda principal, de aquí se irán llamando todos los módulos.
         + __src/login__ - Todo lo relacionado con la ventana de login.
+        + __src/registro__ - Aquí hay todo lo relacionado con la ventana de registro.
+        + __src/panel_gestion__ - Panel principal que verá el usuario, contiene el botón de logout.

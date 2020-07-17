@@ -7,5 +7,5 @@ Estructura de directorios:
 
 - __[Shop](https://github.com/victorgg1993/AskTurn/tree/master/shop)__ - Web que usarán las tiendas para dar su servicio de tickets.
     + __src__ - Carpeta con el código fuente. Index es el archivo que se encarga de ejecutar el archivo de shop.js.
-        + __src/shop__ - Aquí está la tienda principal, de aquí se irán llamando todos los módulos.
+        + __src/index.js__ - Aquí está la tienda principal, de aquí se irán llamando todos los módulos.
         + __src/login__ - Todo lo relacionado con la ventana de login.

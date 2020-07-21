@@ -19,17 +19,6 @@ export default (props) => {
         );
 
         /*
-        // write
-        const ref_tienda = db.collection('tienda');
-
-        let setSf = ref_tienda.doc('aMtZ835Zk2TR4Us9UzOWBBKwJVC2').set({
-            email: 'test@test.com',
-             nombre: 'Pollería pepe',
-        });
-        */
-
-
-        /*
         // read
                 db.collection('tienda').get()
                     .then((snapshot) => {

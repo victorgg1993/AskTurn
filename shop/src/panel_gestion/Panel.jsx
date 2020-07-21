@@ -2,11 +2,52 @@ import React, { useState } from 'react';
 import 'firebase/auth';
 import { useFirebaseApp, useUser } from 'reactfire';
 import { Redirect } from "react-router-dom";
+import 'firebase/firestore';
 
 export default (props) => {
 
     const modulos_firebase = useFirebaseApp();
     const usuario = useUser();
+    const db = modulos_firebase.firestore();
+
+    const trigg = async () => {
+
+        db.collection('tienda').doc(usuario.uid).get().then(
+            (consulta) => {
+                console.log("consulta: ", consulta.data());
+            }
+        );
+
+        /*
+        // write
+        const ref_tienda = db.collection('tienda');
+
+        let setSf = ref_tienda.doc('aMtZ835Zk2TR4Us9UzOWBBKwJVC2').set({
+            email: 'test@test.com',
+             nombre: 'Pollería pepe',
+        });
+        */
+
+
+        /*
+        // read
+                db.collection('tienda').get()
+                    .then((snapshot) => {
+        
+                        snapshot.forEach((doc) => {
+        
+                            if (doc.data().uid_login_tienda === usuario.uid) // si es la tienda del usuario actual
+                            {
+                                console.log(doc.data());
+                            }
+                        });
+                    })
+                    .catch((err) => {
+                        console.log('Error getting documents', err);
+                    });
+        */
+    }
+
 
     const logout = async () => {
         await modulos_firebase.auth().signOut();
@@ -28,8 +69,10 @@ export default (props) => {
                 <div>
                     <p>bienvenido!</p>
                     <p>
+                        <button onClick={trigg}>temporal</button>
                         <button onClick={logout}>Logout</button>
                     </p>
+
                 </div>
             }
 

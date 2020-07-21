@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import 'firebase/auth';
-import { useFirebaseApp } from 'reactfire';
+import { useFirebaseApp, useUser } from 'reactfire';
 import { useHistory } from "react-router-dom";
+
 
 export default (props) => {
 
     const history = useHistory();
     const modulos_firebase = useFirebaseApp();
+    const usuario = useUser();
+    const db = modulos_firebase.firestore();
 
     const [texto_mensaje, setMensaje] = useState('');
 
+    const [nom_usuari, setNombreUsuario] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [password_repetit, setPassword_repetit] = useState('');
@@ -34,9 +38,27 @@ export default (props) => {
         }
         else {
             // lo dejo apagado para no generar mil cuentas
-            //await modulos_firebase.auth().createUserWithEmailAndPassword(email, password);
-            console.log("Apagado, ve a Registro.jsx, función registro y activa el await.");
-            console.log("Correo: " + email + " password: " + password + "  password repetit: " + password_repetit);
+
+            // creamos usuario
+            await modulos_firebase.auth().createUserWithEmailAndPassword(email, password).then(
+                () => {
+                    // creamos estructura de datos
+                    const ref_tienda = db.collection('tienda');
+                    ref_tienda.doc(usuario.uid).set({
+                        email: email,
+                        nombre: nom_usuari,
+                    });
+                }
+            ).catch(
+                ()=>{
+                    setMensaje("Error, el usuario ya existe!");
+                }
+            );
+
+            //console.log("Apagado, ve a Registro.jsx, función registro y activa el await.");
+            // delay con algún mensaje de todo bien
+            // después:
+            //volver_login();
         }
     }
 
@@ -50,6 +72,11 @@ export default (props) => {
             <p>registro!</p>
 
             <p id="id_mensajes_registro">{texto_mensaje}</p>
+
+            <p>
+                <label htmlFor="usuario">Nombre de usuario:</label>
+                <input type="text" id="usuario" onChange={(evento) => setNombreUsuario(evento.target.value)} />
+            </p>
 
             <p>
                 <label htmlFor="email">Correo electrónico:</label>

@@ -6,7 +6,6 @@ import { useHistory, Redirect } from "react-router-dom";
 export default (props) => {
 
     const usuario = useUser();
-
     const history = useHistory();
     const modulos_firebase = useFirebaseApp();
 
@@ -46,7 +45,7 @@ export default (props) => {
                     </p>
 
                     <p>
-                        <a onClick={registro} href="" >Registrarse</a>
+                        <a href="#top" onClick={registro} >Registrarse</a>
                     </p>
                 </div>
             }

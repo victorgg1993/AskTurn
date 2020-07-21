@@ -37,14 +37,12 @@ export default (props) => {
             setMensaje("Error, casilla de email vacío");
         }
         else {
-            // lo dejo apagado para no generar mil cuentas
-
             // creamos usuario
             await modulos_firebase.auth().createUserWithEmailAndPassword(email, password).then(
                 () => {
                     // creamos estructura de datos
                     const ref_tienda = db.collection('tienda');
-                    ref_tienda.doc(usuario.uid).set({
+                    ref_tienda.doc(email).set({
                         email: email,
                         nombre: nom_usuari,
                     });

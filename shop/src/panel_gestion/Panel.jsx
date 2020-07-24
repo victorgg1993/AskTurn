@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+//import React, { useState, useContext } from 'react';
+import React from 'react';
 import 'firebase/auth';
 import { useFirebaseApp, useUser } from 'reactfire';
 import { Redirect } from "react-router-dom";
 import 'firebase/firestore';
+//import { useSelector } from 'react-redux';  // activar cuando no esté el debug activo
 
-export default (props) => {
+const Panel = () => {
+
+    //const _email = useSelector(store => store.email); // activar cuando no esté el debug activo
 
     const modulos_firebase = useFirebaseApp();
     const usuario = useUser();
@@ -12,29 +16,19 @@ export default (props) => {
 
     const trigg = async () => {
 
-        db.collection('tienda').doc(usuario.uid).get().then(
-            (consulta) => {
-                console.log("consulta: ", consulta.data());
-            }
-        );
+        let _email = "test@test.com"; // debug
 
-        /*
-        // read
-                db.collection('tienda').get()
-                    .then((snapshot) => {
-        
-                        snapshot.forEach((doc) => {
-        
-                            if (doc.data().uid_login_tienda === usuario.uid) // si es la tienda del usuario actual
-                            {
-                                console.log(doc.data());
-                            }
-                        });
-                    })
-                    .catch((err) => {
-                        console.log('Error getting documents', err);
-                    });
-        */
+        db.collection('tienda/' + _email + '/ticket').get()
+            .then((snapshot) => {
+
+                snapshot.forEach((doc) => {
+                    console.log("ticket: ", doc.data());
+                });
+            })
+            .catch((err) => {
+                console.log('Error recibiendo los tickets', err);
+            });
+
     }
 
 
@@ -68,3 +62,6 @@ export default (props) => {
         </div>
     )
 }
+
+
+export default Panel;

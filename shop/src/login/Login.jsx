@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+//import React, { useState, useContext } from 'react';
+import React  from 'react';
 import 'firebase/auth';
 import { useFirebaseApp, useUser } from 'reactfire';
 import { useHistory, Redirect } from "react-router-dom";
+import * as actions from '../redux/actions';
+import { useSelector, useDispatch } from 'react-redux';
 
-export default (props) => {
+const Login = () => {
+
+    const dispatch = useDispatch();
 
     const usuario = useUser();
     const history = useHistory();
     const modulos_firebase = useFirebaseApp();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const email = useSelector(store => store.email);
+    const password = useSelector(store => store.password);
 
-    const registro = () => {
+    const registro = (e) => {
 
+        e.preventDefault(); // para que no se vaya a "a_ningun_lado"
         let path = `/register`;
         history.push(path);
     }
@@ -28,16 +34,16 @@ export default (props) => {
             {
                 !usuario &&
                 <div>
-                    <p>login!</p>
+                    <p>ventana de login:</p>
 
                     <p>
                         <label htmlFor="email">Correo electrónico:</label>
-                        <input type="email" id="email" onChange={(evento) => setEmail(evento.target.value)} />
+                        <input type="email" id="email" onChange={(evento) => dispatch(actions.darEmail(evento.target.value))} />
                     </p>
 
                     <p>
                         <label htmlFor="password">Password:</label>
-                        <input type="password" id="password" onChange={(evento) => setPassword(evento.target.value)} />
+                        <input type="password" id="password" onChange={(evento) => dispatch(actions.darPassword(evento.target.value))} />
                     </p>
 
                     <p>
@@ -45,7 +51,7 @@ export default (props) => {
                     </p>
 
                     <p>
-                        <a href="#top" onClick={registro} >Registrarse</a>
+                        <a href="#a_ningun_lado" onClick={registro} >Registrarse</a>
                     </p>
                 </div>
             }
@@ -60,3 +66,5 @@ export default (props) => {
         </div>
     )
 }
+
+export default Login;

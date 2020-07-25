@@ -28,9 +28,7 @@ const Panel = () => {
             .catch((err) => {
                 console.log('Error recibiendo los tickets', err);
             });
-
     }
-
 
     const logout = async () => {
         await modulos_firebase.auth().signOut();

@@ -1,5 +1,5 @@
 //import React, { useState, useContext } from 'react';
-import React, { useState  } from 'react';
+import React, { useState } from 'react';
 import 'firebase/auth';
 //import { useFirebaseApp, useUser } from 'reactfire';
 import { useFirebaseApp } from 'reactfire';
@@ -33,12 +33,6 @@ export default (props) => {
 
     const ir_panel = () => {
         let path = `/panel`;
-        history.push(path);
-    }
-
-    const ir_login = (e) => {
-        e.preventDefault(); // para que no se vaya a "a_ningun_lado"
-        let path = `/`;
         history.push(path);
     }
 
@@ -112,7 +106,7 @@ export default (props) => {
             </p>
 
             <p>
-                <a href="#a_ningun_lado" onClick={ir_login} >Volver al login</a>
+                <a href="/" >Volver al login</a>
             </p>
         </div>
     )

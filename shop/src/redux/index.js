@@ -28,6 +28,7 @@ const counterReducer = (state = initialState, action) => {
         ...state,
         password_repe: action.dada
       };
+    
     case DAR_NOMBRE_USER:
       return {
         ...state,

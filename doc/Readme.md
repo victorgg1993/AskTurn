@@ -1,4 +1,4 @@
-# TaskTurn
+# AskTurn
 
 <img src="https://raw.githubusercontent.com/victorgg1993/AskTurn/master/doc/img/app.png" alt="Imagen app cliente" width="500"/>
 

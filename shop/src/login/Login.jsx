@@ -1,8 +1,8 @@
 //import React, { useState, useContext } from 'react';
-import React  from 'react';
+import React from 'react';
 import 'firebase/auth';
 import { useFirebaseApp, useUser } from 'reactfire';
-import { useHistory, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import * as actions from '../redux/actions';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -11,18 +11,10 @@ const Login = () => {
     const dispatch = useDispatch();
 
     const usuario = useUser();
-    const history = useHistory();
     const modulos_firebase = useFirebaseApp();
 
     const email = useSelector(store => store.email);
     const password = useSelector(store => store.password);
-
-    const registro = (e) => {
-
-        e.preventDefault(); // para que no se vaya a "a_ningun_lado"
-        let path = `/register`;
-        history.push(path);
-    }
 
     const hacer_login = async () => {
 
@@ -51,7 +43,7 @@ const Login = () => {
                     </p>
 
                     <p>
-                        <a href="#a_ningun_lado" onClick={registro} >Registrarse</a>
+                        <a href="/register" >Registrarse</a>
                     </p>
                 </div>
             }

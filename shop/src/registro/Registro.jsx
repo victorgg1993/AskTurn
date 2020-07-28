@@ -19,7 +19,7 @@ export default (props) => {
 
     const [texto_mensaje, setMensaje] = useState(''); // tira mensajes de error, aviso, etc
 
-    const nom_usuari = useSelector(store => store.email);
+    const nom_usuari = useSelector(store => store.nombre_usuario);
     const email = useSelector(store => store.email);
     const password = useSelector(store => store.password);
     const password_repetit = useSelector(store => store.password_repe);

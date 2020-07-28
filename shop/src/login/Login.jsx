@@ -1,5 +1,5 @@
 //import React, { useState, useContext } from 'react';
-import React from 'react';
+import React, {useRef} from 'react';
 import 'firebase/auth';
 import { useFirebaseApp, useUser } from 'reactfire';
 import { Redirect } from "react-router-dom";
@@ -13,12 +13,19 @@ const Login = () => {
     const usuario = useUser();
     const modulos_firebase = useFirebaseApp();
 
-    const email = useSelector(store => store.email);
-    const password = useSelector(store => store.password);
+    //const email = useSelector(store => store.email);
+    //const password = useSelector(store => store.password);
+
+    const input_email = useRef(null);
+    const input_password = useRef(null);
+
 
     const hacer_login = async () => {
-
-        await modulos_firebase.auth().signInWithEmailAndPassword(email, password);
+        dispatch(actions.darEmail(input_email.current.value)); // guardar email
+        dispatch(actions.darPassword(input_password.current.value)); // guardar password
+        console.log("email:", input_email.current.value);
+        console.log("password:", input_password.current.value);
+        await modulos_firebase.auth().signInWithEmailAndPassword(input_email.current.value, input_password.current.value);
     }
 
     return (
@@ -30,12 +37,12 @@ const Login = () => {
 
                     <p>
                         <label htmlFor="email">Correo electrónico:</label>
-                        <input type="email" id="email" onChange={(evento) => dispatch(actions.darEmail(evento.target.value))} />
+                        <input type="email" id="email" ref={input_email} />
                     </p>
 
                     <p>
                         <label htmlFor="password">Password:</label>
-                        <input type="password" id="password" onChange={(evento) => dispatch(actions.darPassword(evento.target.value))} />
+                        <input type="password" id="password" ref={input_password} />
                     </p>
 
                     <p>

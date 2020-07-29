@@ -3,6 +3,7 @@ export const DAR_PASSW = 'DAR_PASSW';
 export const DAR_PASSW_REP = 'DAR_PASSW_REP';
 export const DAR_NOMBRE_USER = 'DAR_NOMBRE_USER';
 export const ADD_TICKETS = 'DAR_ARR_TICKETS';
+export const FLUSH_TICKETS = 'FLUSH_TICKETS';
 
 // Action creators
 export function darEmail(email) {
@@ -24,4 +25,8 @@ export function darNombreUsuario(nombre_usuario) {
 
 export function addTicket(array_tickets) {
     return { type: ADD_TICKETS, dada: array_tickets };
+}
+
+export function flushTicket() {
+    return { type: FLUSH_TICKETS};
 }

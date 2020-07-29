@@ -1,6 +1,6 @@
 import { createStore, combineReducers } from 'redux';
 import produce from 'immer';
-import { DAR_EMAIL, DAR_PASSW, DAR_PASSW_REP, DAR_NOMBRE_USER, ADD_TICKETS } from './actions';
+import { DAR_EMAIL, DAR_PASSW, DAR_PASSW_REP, DAR_NOMBRE_USER, ADD_TICKETS, FLUSH_TICKETS } from './actions';
 
 const initialState = {
   nombre_usuario: "",
@@ -52,6 +52,13 @@ function funcionTickets(prevState = [], action) {
       return produce(prevState, draftState => {
         draftState.push({ activo: action.dada.activo, nombre: action.dada.nombre });
       })
+
+    case FLUSH_TICKETS:
+      return produce(prevState, draftState => {
+
+        draftState.splice(0, draftState.length)
+      })
+
     default:
       return prevState
   }

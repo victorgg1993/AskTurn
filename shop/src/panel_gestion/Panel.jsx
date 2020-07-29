@@ -2,16 +2,17 @@
 import React, { useEffect } from 'react';
 import 'firebase/auth';
 import { useFirebaseApp, useUser } from 'reactfire';
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';  // activar cuando no esté el debug activo
-import { addTicket } from '../redux/actions';
+import { addTicket, flushTicket } from '../redux/actions';
 
 const Panel = () => {
 
     //const _email = useSelector(store => store.email); // activar cuando no esté el debug activo
     const array_tickets = useSelector(store => store.funcionTickets);
 
+    const history = useHistory();
     const dispatch = useDispatch();
 
     const modulos_firebase = useFirebaseApp();
@@ -34,24 +35,26 @@ const Panel = () => {
 
         evento.stopPropagation();
 
-        //let lista = document.getElementById('id_lista_tickets').selectedIndex;
+        let modal = document.getElementById('modal_tickets');
+        modal.show = 'display-block';
 
-        //if (lista < 0) // si no hay ninguna seleccionada, será la primera
-        //{
-        //  lista = 0;
-        //}
-        //console.log("Tanda " + lista + " seleccionada!");
+        if (index < 0) {  // si no hay ninguna seleccionada, será la primera
+            index = 0;
+        }
 
-        console.log("Ticket num: " + index + ", nombre: " + ticket.nombre + " seleccionado");
+        //console.log("Ticket num: " + index + ", nombre: " + ticket.nombre + " estado: " + ticket.activo + " .");
+        history.push('/tanda?id=' + index);
     }
 
     useEffect(() => {
-        console.log("useEffect!");
-
         let _email = "test@test.com"; // debug
+        
+        console.log("useEffect!");
+        
+        dispatch(flushTicket()); // vaciamos el array para tener los más nuevos de la DB
 
-        db.collection('tienda/' + _email + '/ticket').get()
-            .then((snapshot) => {
+        db.collection('tienda/' + _email + '/ticket').get().then(
+            (snapshot) => {
                 snapshot.forEach(
                     (doc) => {
                         dispatch(addTicket(doc.data()));
@@ -79,16 +82,28 @@ const Panel = () => {
                 <div>
                     <p>Bienvenido!</p>
 
+                    <div id="modal_tickets" className="modal display-block">
+                        <section className="modal-main">
+                            <button >close</button>
+                        </section>
+                    </div>
+
                     <p>
                         <label>Elige un ticket:</label>
-                        <select id="id_lista_tickets" size="3">
-                            {
-                                array_tickets.map((ticket_actual, index) => (
-                                    <option onDoubleClick={(evento) => { entrar_tanda(evento, ticket_actual, index) }} key={index}>
-                                        Nombre: {ticket_actual.nombre}
-                                     ---   Activo: {ticket_actual.activo ? "Sí" : "No"}
-                                    </option>
-                                ))}
+                        <select id="id_lista_tickets" size="3">{
+
+                            array_tickets.map((ticket_actual, index) => (
+                                <option key={index} onDoubleClick={
+
+                                    (evento) => {
+                                        entrar_tanda(evento, ticket_actual, index)
+                                    }}>
+
+                                    Nombre: {ticket_actual.nombre}
+                                    ID: {index}
+                                </option>
+                            ))
+                        }
                         </select>
                     </p>
 

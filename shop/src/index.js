@@ -14,6 +14,7 @@ import firebaseConfig from './configuracion_firebase';
 import Login from './login/Login'; // ventana de login del usuario
 import Registro from './registro/Registro'; // ventana de registro de usuario
 import Panel from './panel_gestion/Panel'; // panel que verá el usuario una vez loggeado
+import Tanda from './tanda/Tanda'; // tanda ticket actual
 
 
 ReactDOM.render(
@@ -47,6 +48,15 @@ ReactDOM.render(
                 </div>
               </Suspense>
             </Route>
+
+            <Route path="/tanda">
+              <Suspense fallback={'Conectando...'}>
+                <div className="div_panel_tanda">
+                  <Tanda />
+                </div>
+              </Suspense>
+            </Route>
+
 
           </Switch>
         </Router>

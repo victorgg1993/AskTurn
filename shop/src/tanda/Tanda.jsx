@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Redirect } from "react-router-dom";
 import { useSelector } from 'react-redux';  // activar cuando no esté el debug activo
 import 'firebase/firestore';
 
@@ -20,9 +21,10 @@ const Tanda = () => {
         // temporal, haciendo pruebas
         let index = mirar_tanda_desde_la_url();
         let arr_tmp = array_tickets.slice(index, index + 1);
-        arr_tmp = arr_tmp[0];
+        //arr_tmp = arr_tmp[0];
         console.log("index: ", index);
-        console.log("arr tmp: ", arr_tmp);
+        console.log("arr completo: ", arr_tmp);
+        console.log("arr 0: ", arr_tmp[0]);
         //console.log("nombre: ", arr_tmp.nombre); // tomamos el elemento que nos interesa
 
     }, []) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
@@ -79,6 +81,11 @@ const Tanda = () => {
             <p>
                 <button onClick={handler_siguiente}>siguiente</button>
             </p>
+
+            <p>
+                <a href="/panel" >Volver al panel</a>
+            </p>
+
 
         </div>
     )

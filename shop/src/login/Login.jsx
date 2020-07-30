@@ -23,8 +23,6 @@ const Login = () => {
     const hacer_login = async () => {
         dispatch(actions.darEmail(input_email.current.value)); // guardar email
         dispatch(actions.darPassword(input_password.current.value)); // guardar password
-        console.log("email:", input_email.current.value);
-        console.log("password:", input_password.current.value);
         await modulos_firebase.auth().signInWithEmailAndPassword(input_email.current.value, input_password.current.value);
     }
 

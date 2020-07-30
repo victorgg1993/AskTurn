@@ -19,7 +19,8 @@ const Panel = () => {
     const usuario = useUser();
     const db = modulos_firebase.firestore();
 
-    const logout = async () => {
+    const logout = async (e) => {
+        e.preventDefault();
         await modulos_firebase.auth().signOut();
     }
 
@@ -47,23 +48,26 @@ const Panel = () => {
     }
 
     useEffect(() => {
-        let _email = "test@test.com"; // debug
-        
-        console.log("useEffect!");
-        
-        dispatch(flushTicket()); // vaciamos el array para tener los más nuevos de la DB
 
-        db.collection('tienda/' + _email + '/ticket').get().then(
-            (snapshot) => {
-                snapshot.forEach(
-                    (doc) => {
-                        dispatch(addTicket(doc.data()));
-                    }
-                );
-            })
-            .catch((err) => {
-                console.log('Error recibiendo los tickets', err);
-            });
+        if (usuario) { // si hay algún usuario loggeado, buscamos en firebase
+            let _email = "test@test.com"; // debug
+
+            console.log("useEffect!");
+
+            dispatch(flushTicket()); // vaciamos el array para tener los más nuevos de la DB
+
+            db.collection('tienda/' + _email + '/ticket').get().then(
+                (snapshot) => {
+                    snapshot.forEach(
+                        (doc) => {
+                            dispatch(addTicket(doc.data()));
+                        }
+                    );
+                })
+                .catch((err) => {
+                    console.log('Error recibiendo los tickets', err);
+                });
+        }
     }, []) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
 
     return (
@@ -116,7 +120,7 @@ const Panel = () => {
                     </p>
 
                     <p>
-                        <button onClick={logout}>Logout</button>
+                        <a href="/logout" onClick={logout}>Logout</a>
                     </p>
                 </div>
             }

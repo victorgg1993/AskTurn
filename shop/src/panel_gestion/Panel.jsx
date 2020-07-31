@@ -5,7 +5,8 @@ import { useFirebaseApp, useUser } from 'reactfire';
 import { Redirect, useHistory } from "react-router-dom";
 import 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';  // activar cuando no esté el debug activo
-import { addTicket, flushTicket } from '../redux/actions';
+//import { addTicket, flushTicket } from '../redux/actions';
+import { addTicket } from '../redux/actions';
 
 const Panel = () => {
 
@@ -54,7 +55,7 @@ const Panel = () => {
 
             console.log("useEffect!");
 
-            dispatch(flushTicket()); // vaciamos el array para tener los más nuevos de la DB
+           //dispatch(flushTicket()); // vaciamos el array para tener los más nuevos de la DB
 
             db.collection('tienda/' + _email + '/ticket').get().then(
                 (snapshot) => {
@@ -68,7 +69,7 @@ const Panel = () => {
                     console.log('Error recibiendo los tickets', err);
                 });
         }
-    }, []) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
+    }, [dispatch, db , usuario]) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
 
     return (
         <div>
@@ -103,8 +104,7 @@ const Panel = () => {
                                         entrar_tanda(evento, ticket_actual, index)
                                     }}>
 
-                                    Nombre: {ticket_actual.nombre}
-                                    ID: {index}
+                                    Nombre: {ticket_actual.nombre}   ID: {index}
                                 </option>
                             ))
                         }

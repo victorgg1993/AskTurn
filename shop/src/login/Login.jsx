@@ -4,7 +4,8 @@ import 'firebase/auth';
 import { useFirebaseApp, useUser } from 'reactfire';
 import { Redirect } from "react-router-dom";
 import * as actions from '../redux/actions';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+//import { useSelector, useDispatch } from 'react-redux';
 
 const Login = () => {
 

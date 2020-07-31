@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Redirect } from "react-router-dom";
+//import { Redirect } from "react-router-dom";
 import { useSelector } from 'react-redux';  // activar cuando no esté el debug activo
 import 'firebase/firestore';
 
@@ -27,7 +27,7 @@ const Tanda = () => {
         console.log("arr 0: ", arr_tmp[0]);
         //console.log("nombre: ", arr_tmp.nombre); // tomamos el elemento que nos interesa
 
-    }, []) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
+    }, [array_tickets]) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
 
 
 
@@ -39,12 +39,10 @@ const Tanda = () => {
 
         estado_start_pause = !estado_start_pause;
 
-        if(estado_start_pause)
-        {
+        if (estado_start_pause) {
             obj_boton.innerText = "Pause";
         }
-        else
-        {
+        else {
             obj_boton.innerText = "Start";
         }
     }

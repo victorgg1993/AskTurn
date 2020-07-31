@@ -50,7 +50,15 @@ function funcionTickets(prevState = [], action) {
     case ADD_TICKETS:
       //return produce(prevState, draftState => { draftState.push(action); })
       return produce(prevState, draftState => {
-        draftState.push({ activo: action.dada.activo, nombre: action.dada.nombre });
+        draftState.push(
+          { 
+            activo: action.dada.activo,
+            date_final: action.dada.date_final,
+            date_inicio: action.dada.date_inicio,
+            n_tanda_curso: action.dada.n_tanda_curso,
+            n_total_clientes: action.dada.n_total_clientes,
+            nombre: action.dada.nombre 
+          });
       })
 
     case FLUSH_TICKETS:

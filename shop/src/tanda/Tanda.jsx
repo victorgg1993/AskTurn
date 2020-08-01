@@ -1,15 +1,21 @@
+import './tanda.css';
 import React, { useEffect } from 'react';
 //import { Redirect } from "react-router-dom";
-import { useSelector } from 'react-redux';  // activar cuando no esté el debug activo
+import { useSelector, useDispatch } from 'react-redux';  // activar cuando no esté el debug activo
+import * as actions from '../redux/actions';
+//import { addTicket, flushTicket } from '../redux/actions';
+
 import 'firebase/firestore';
 
 
 const Tanda = () => {
 
-    let estado_start_pause = 0;
-    const array_tickets = useSelector(store => store.funcionTickets);
+    const dispatch = useDispatch();
 
-    const mirar_tanda_desde_la_url = () => {
+    const array_tickets = useSelector(store => store.funcionTickets);
+    const estado_tanda = useSelector(store => store.estado_tanda);
+    
+    const mirar_id_url = () => {
         let current_url = new URL(window.location.href);
         let search_params = current_url.searchParams;
         return (search_params.get('id'));
@@ -17,17 +23,36 @@ const Tanda = () => {
 
 
     useEffect(() => {
+        console.log("useEffect tanda");
+                
+        console.log("estado_tanda", estado_tanda);
 
-        // temporal, haciendo pruebas
-        let index = mirar_tanda_desde_la_url();
-        let arr_tmp = array_tickets.slice(index, index + 1);
-        //arr_tmp = arr_tmp[0];
-        console.log("index: ", index);
-        console.log("arr completo: ", arr_tmp);
-        console.log("arr 0: ", arr_tmp[0]);
-        //console.log("nombre: ", arr_tmp.nombre); // tomamos el elemento que nos interesa
+        
+        if (estado_tanda) { // start
+            document.getElementById("btn_stop").disabled = false;
+            document.getElementById("btn_anterior").disabled = false;
+            document.getElementById("btn_siguiente").disabled = false;
+        }
+        else { // pause
+            document.getElementById("btn_stop").disabled = true;
+            document.getElementById("btn_anterior").disabled = true;
+            document.getElementById("btn_siguiente").disabled = true;    
+        }
 
-    }, [array_tickets]) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
+
+        let obj_n_actual = document.getElementById('id_texto_n_actual');
+        let obj_n_total = document.getElementById('id_texto_n_total');
+
+        array_tickets.map((elemento, indice) => {
+
+            if (indice == mirar_id_url()) {
+                console.log("elemento: ", elemento);
+                obj_n_actual.innerText = elemento.n_tanda_curso;
+                obj_n_total.innerText = elemento.n_total_clientes;
+            }
+        });
+
+    }, [array_tickets, estado_tanda]) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
 
 
 
@@ -35,11 +60,15 @@ const Tanda = () => {
     const handler_start_pause = (evento) => {
         evento.preventDefault();
         //evento.stopPropagation();
+
+        console.log("valor estado start pause: ", estado_tanda);
+
         let obj_boton = document.getElementById('btn_pause_start_tanda');
 
-        estado_start_pause = !estado_start_pause;
+        //dispatch(actions.darEstadoTanda(!estado_tanda)); 
 
-        if (estado_start_pause) {
+
+        if (estado_tanda === 'true') {
             obj_boton.innerText = "Pause";
         }
         else {
@@ -62,22 +91,34 @@ const Tanda = () => {
 
     return (
         <div>
-            <p>tanda {mirar_tanda_desde_la_url()}</p>
+
+            <p>
+                Actual: 
+                <textarea readOnly id="id_texto_n_actual" rows="1" cols="3" wrap="hard">
+                </textarea>
+            </p>
+
+            <p>
+                Total: 
+                <textarea readOnly id="id_texto_n_total" rows="1" cols="3" wrap="hard">
+                </textarea>
+            </p>
+
 
             <p>
                 <button id="btn_pause_start_tanda" onClick={handler_start_pause}>Start</button>
             </p>
 
             <p>
-                <button onClick={handler_stop}>stop</button>
+                <button id="btn_stop" onClick={handler_stop}>stop</button>
             </p>
 
             <p>
-                <button onClick={handler_anterior}>anterior</button>
+                <button id="btn_anterior" onClick={handler_anterior}>anterior</button>
             </p>
 
             <p>
-                <button onClick={handler_siguiente}>siguiente</button>
+                <button id="btn_siguiente" onClick={handler_siguiente}>siguiente</button>
             </p>
 
             <p>

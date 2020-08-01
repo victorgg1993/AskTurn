@@ -1,0 +1,7 @@
+textarea{
+    outline: none;
+    resize: none;
+    overflow: auto;
+    font-size: 50px;   
+    text-align: center;
+}

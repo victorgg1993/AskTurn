@@ -26,7 +26,17 @@ const Panel = () => {
     }
 
     const crear_tanda = () => {
-        console.log("función crear tanda, falta implementar");
+    console.log("función crear tanda, falta implementar");
+    /*
+    // ------------------ temporal ( funciona )
+    const ref_tienda = db.collection(`tienda/` + usuario.email + `/ticket`);
+    ref_tienda.doc(`ticket_2`).set({
+    activo: false,
+    n_tanda_curso: 2,
+    });
+    // ------------------ temporal
+
+    */
     }
 
     const borrar_tanda = () => {

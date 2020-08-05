@@ -1,20 +1,23 @@
 import './tanda.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 //import { Redirect } from "react-router-dom";
+import { useFirebaseApp, useUser } from 'reactfire';
 import { useSelector, useDispatch } from 'react-redux';  // activar cuando no esté el debug activo
-import * as actions from '../redux/actions';
-//import { addTicket, flushTicket } from '../redux/actions';
-
+import { addTicket } from '../redux/actions';
+import 'firebase/auth';
 import 'firebase/firestore';
-
 
 const Tanda = () => {
 
+    const modulos_firebase = useFirebaseApp();
+    const db = modulos_firebase.firestore();
     const dispatch = useDispatch();
+    const usuario = useUser();
 
-    const array_tickets = useSelector(store => store.funcionTickets);
-    const estado_tanda = useSelector(store => store.estado_tanda);
-    
+    const arr_tickets = useSelector(store => store.funcionTickets);
+    const [estado_tanda, setEstadoTanda] = useState(false);
+    const [n_ticket, setIndiceTicket] = useState(0);
+
     const mirar_id_url = () => {
         let current_url = new URL(window.location.href);
         let search_params = current_url.searchParams;
@@ -24,68 +27,79 @@ const Tanda = () => {
 
     useEffect(() => {
         console.log("useEffect tanda");
-                
-        console.log("estado_tanda", estado_tanda);
+        let id_url = mirar_id_url();
+        setIndiceTicket(id_url);
 
-        
-        if (estado_tanda) { // start
-            document.getElementById("btn_stop").disabled = false;
-            document.getElementById("btn_anterior").disabled = false;
-            document.getElementById("btn_siguiente").disabled = false;
-        }
-        else { // pause
-            document.getElementById("btn_stop").disabled = true;
-            document.getElementById("btn_anterior").disabled = true;
-            document.getElementById("btn_siguiente").disabled = true;    
-        }
+        let botones = ['btn_stop', 'btn_anterior', 'btn_siguiente'];
 
+        botones.map( // activamos / desactivamos cada botón en función del estado de la tanda
+            (elemento) => {
+                document.getElementById(elemento).disabled = (!estado_tanda);
+            }
+        );
 
-        let obj_n_actual = document.getElementById('id_texto_n_actual');
-        let obj_n_total = document.getElementById('id_texto_n_total');
+        document.getElementById('btn_pause_start_tanda').innerText = (estado_tanda ? "Pause" : "Start");
 
-        array_tickets.map((elemento, indice) => {
-
-            if (indice == mirar_id_url()) {
-                console.log("elemento: ", elemento);
-                obj_n_actual.innerText = elemento.n_tanda_curso;
-                obj_n_total.innerText = elemento.n_total_clientes;
+        arr_tickets.map((elemento, indice) => {
+            if (indice == id_url) {
+                document.getElementById('id_texto_n_actual').innerText = elemento.n_tanda_curso;
+                document.getElementById('id_texto_n_total').innerText = elemento.n_total_clientes;
             }
         });
 
-    }, [array_tickets, estado_tanda]) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
+    }, [arr_tickets, estado_tanda]) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
 
 
+    const updateDataTicket = (ticket) => {
+        const ref_tienda = db.collection(`tienda/` + usuario.email + `/ticket`);
 
+        ref_tienda.doc(`ticket_` + mirar_id_url()).set({
+            activo: ticket.activo,
+            date_final: ticket.date_final,
+            date_inicio: ticket.date_inicio,
+            n_tanda_curso: ticket.n_tanda_curso,
+            n_total_clientes: ticket.n_total_clientes,
+            nombre: ticket.nombre,
+        });
+    }
 
     const handler_start_pause = (evento) => {
         evento.preventDefault();
         //evento.stopPropagation();
-
-        console.log("valor estado start pause: ", estado_tanda);
-
+        setEstadoTanda(!estado_tanda);
+        
         let obj_boton = document.getElementById('btn_pause_start_tanda');
-
-        //dispatch(actions.darEstadoTanda(!estado_tanda)); 
-
-
-        if (estado_tanda === 'true') {
-            obj_boton.innerText = "Pause";
-        }
-        else {
-            obj_boton.innerText = "Start";
-        }
+        (estado_tanda? obj_boton.innerText = "Pause": obj_boton.innerText = "Start");
     }
+
     const handler_stop = (evento) => {
         evento.preventDefault();
         //evento.stopPropagation();
     }
+
     const handler_anterior = (evento) => {
         evento.preventDefault();
         //evento.stopPropagation();
+
+        if (arr_tickets[n_ticket].n_tanda_curso > 0) {
+            arr_tickets[n_ticket].n_tanda_curso--;
+            console.log("numero tanda: ", arr_tickets[n_ticket].n_tanda_curso);
+            dispatch(addTicket(arr_tickets));
+            // enviar por firebase
+            updateDataTicket(arr_tickets[n_ticket]);
+        }
     }
+
     const handler_siguiente = (evento) => {
         evento.preventDefault();
         //evento.stopPropagation();
+
+        if (arr_tickets[n_ticket].n_tanda_curso < arr_tickets[n_ticket].n_total_clientes) {
+            arr_tickets[n_ticket].n_tanda_curso++;
+            dispatch(addTicket(arr_tickets));
+            // enviar por firebase
+            updateDataTicket(arr_tickets[n_ticket]);
+        }
     }
 
 
@@ -93,13 +107,13 @@ const Tanda = () => {
         <div>
 
             <p>
-                Actual: 
+                Actual:
                 <textarea readOnly id="id_texto_n_actual" rows="1" cols="3" wrap="hard">
                 </textarea>
             </p>
 
             <p>
-                Total: 
+                Total:
                 <textarea readOnly id="id_texto_n_total" rows="1" cols="3" wrap="hard">
                 </textarea>
             </p>

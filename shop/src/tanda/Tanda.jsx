@@ -24,9 +24,9 @@ const Tanda = () => {
         return (search_params.get('id'));
     };
 
-
     useEffect(() => {
         console.log("useEffect tanda");
+
         let id_url = mirar_id_url();
         setIndiceTicket(id_url);
 
@@ -64,26 +64,27 @@ const Tanda = () => {
     }
 
     const handler_start_pause = (evento) => {
-        evento.preventDefault();
-        //evento.stopPropagation();
+        evento.preventDefault(); //evento.stopPropagation();
         setEstadoTanda(!estado_tanda);
-        
+
         let obj_boton = document.getElementById('btn_pause_start_tanda');
-        (estado_tanda? obj_boton.innerText = "Pause": obj_boton.innerText = "Start");
+        (estado_tanda ? obj_boton.innerText = "Pause" : obj_boton.innerText = "Start");
     }
 
     const handler_stop = (evento) => {
-        evento.preventDefault();
-        //evento.stopPropagation();
+        evento.preventDefault(); //evento.stopPropagation();
+
+        arr_tickets[n_ticket].activo = false;
+        arr_tickets[n_ticket].date_final = Date.now(); // la fecha final es al darle a stop
+
+        updateDataTicket(arr_tickets[n_ticket]);
     }
 
     const handler_anterior = (evento) => {
-        evento.preventDefault();
-        //evento.stopPropagation();
+        evento.preventDefault(); //evento.stopPropagation();
 
-        if (arr_tickets[n_ticket].n_tanda_curso > 0) {
+        if (arr_tickets[n_ticket].n_tanda_curso > 1) {
             arr_tickets[n_ticket].n_tanda_curso--;
-            console.log("numero tanda: ", arr_tickets[n_ticket].n_tanda_curso);
             dispatch(addTicket(arr_tickets));
             // enviar por firebase
             updateDataTicket(arr_tickets[n_ticket]);
@@ -91,8 +92,7 @@ const Tanda = () => {
     }
 
     const handler_siguiente = (evento) => {
-        evento.preventDefault();
-        //evento.stopPropagation();
+        evento.preventDefault(); //evento.stopPropagation();
 
         if (arr_tickets[n_ticket].n_tanda_curso < arr_tickets[n_ticket].n_total_clientes) {
             arr_tickets[n_ticket].n_tanda_curso++;
@@ -101,7 +101,6 @@ const Tanda = () => {
             updateDataTicket(arr_tickets[n_ticket]);
         }
     }
-
 
     return (
         <div>
@@ -118,28 +117,12 @@ const Tanda = () => {
                 </textarea>
             </p>
 
+            <p><button id="btn_pause_start_tanda" onClick={handler_start_pause}>Start</button></p>
+            <p><button id="btn_stop" onClick={handler_stop}>Stop</button></p>
+            <p><button id="btn_anterior" onClick={handler_anterior}>Anterior</button></p>
 
-            <p>
-                <button id="btn_pause_start_tanda" onClick={handler_start_pause}>Start</button>
-            </p>
-
-            <p>
-                <button id="btn_stop" onClick={handler_stop}>stop</button>
-            </p>
-
-            <p>
-                <button id="btn_anterior" onClick={handler_anterior}>anterior</button>
-            </p>
-
-            <p>
-                <button id="btn_siguiente" onClick={handler_siguiente}>siguiente</button>
-            </p>
-
-            <p>
-                <a href="/panel" >Volver al panel</a>
-            </p>
-
-
+            <p><button id="btn_siguiente" onClick={handler_siguiente}>Siguiente</button></p>
+            <p><a href="/panel" >Volver al panel</a></p>
         </div>
     )
 }

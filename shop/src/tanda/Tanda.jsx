@@ -1,13 +1,17 @@
 import './tanda.css';
 import React, { useEffect, useState } from 'react';
-//import { Redirect } from "react-router-dom";
 import { useFirebaseApp, useUser } from 'reactfire';
 import { useSelector, useDispatch } from 'react-redux';  // activar cuando no esté el debug activo
 import { addTicket } from '../redux/actions';
 import 'firebase/auth';
 import 'firebase/firestore';
+//import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import * as firebase from 'firebase';
 
 const Tanda = () => {
+
+    const history = useHistory();
 
     const modulos_firebase = useFirebaseApp();
     const db = modulos_firebase.firestore();
@@ -75,9 +79,10 @@ const Tanda = () => {
         evento.preventDefault(); //evento.stopPropagation();
 
         arr_tickets[n_ticket].activo = false;
-        arr_tickets[n_ticket].date_final = Date.now(); // la fecha final es al darle a stop
+        arr_tickets[n_ticket].date_final = firebase.firestore.Timestamp.fromDate(new Date()); // la fecha final es al darle a stop
 
         updateDataTicket(arr_tickets[n_ticket]);
+        history.push('/panel');
     }
 
     const handler_anterior = (evento) => {

@@ -5,14 +5,13 @@ import 'firebase/auth';
 import { useFirebaseApp, useUser } from 'reactfire';
 import { Redirect, useHistory } from "react-router-dom";
 import 'firebase/firestore';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import { useSelector, useDispatch } from 'react-redux';  // activar cuando no esté el debug activo
-//import { addTicket, flushTicket } from '../redux/actions';
-import { addTicket } from '../redux/actions';
+import { addTicket, flushTicket } from '../redux/actions';
+//import { useCollection } from "react-firebase-hooks/firestore";
 
 const Panel = () => {
 
-    //const _email = useSelector(store => store.email); // activar cuando no esté el debug activo
     const array_tickets = useSelector(store => store.funcionTickets);
 
     const [n_tickets, setNumTickets] = useState(0);
@@ -23,6 +22,14 @@ const Panel = () => {
     const modulos_firebase = useFirebaseApp();
     const usuario = useUser();
     const db = modulos_firebase.firestore();
+
+/*
+    let cerrar_listener = db.collection(`tienda/${usuario.email}/ticket`)
+        .onSnapshot(function () {
+            console.log("Cambios en la DB! (panel)");
+        });
+        */
+
 
     const logout = async (e) => {
         e.preventDefault();
@@ -35,12 +42,14 @@ const Panel = () => {
         modal.style.display = "block";
     }
 
-    const onClick_aceptar_tanda = () => {
-        
-        let nombre_tanda = document.getElementById("id_nombre_tanda").value;
-        console.log("nombre tanda", nombre_tanda);
+    const onClick_aceptar_tanda = (evento) => {
+        evento.preventDefault();
 
-        const ref_tienda = db.collection(`tienda/` + usuario.email + `/ticket`);
+        let modal = document.getElementById("id_modal_crear_tanda");
+        let nombre_tanda = document.getElementById("id_nombre_tanda").value;
+
+        const ref_tienda = db.collection(`tienda/${usuario.email}/ticket`);
+
         ref_tienda.doc(`ticket_` + n_tickets).set({
             activo: true,
             date_final: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -50,6 +59,7 @@ const Panel = () => {
             nombre: nombre_tanda,
         }).then(
             () => {
+                modal.style.display = "none";
                 window.location.reload();
             }
         );
@@ -59,7 +69,7 @@ const Panel = () => {
 
         let modal = document.getElementById("id_modal_crear_tanda");
 
-        if (modal != undefined) {
+        if (modal !== undefined) {
             modal.style.display = "none";
         }
     }
@@ -104,13 +114,11 @@ const Panel = () => {
     useEffect(() => {
 
         if (usuario) { // si hay algún usuario loggeado, buscamos en firebase
-            let _email = "test@test.com"; // debug
-
             console.log("useEffect!");
 
-            //dispatch(flushTicket()); // vaciamos el array para tener los más nuevos de la DB
+            dispatch(flushTicket()); // vaciamos el array para tener los más nuevos de la DB
 
-            db.collection('tienda/' + _email + '/ticket').get().then(
+            db.collection('tienda/' + usuario.email + '/ticket').get().then(
                 (snapshot) => {
 
                     setNumTickets(snapshot.size); // apuntamos el número de tickets que hay ( usado en crear_tanda() )
@@ -124,6 +132,15 @@ const Panel = () => {
                 .catch((err) => {
                     console.log('Error recibiendo los tickets', err);
                 });
+
+
+            /*
+                        // temporal
+                        db.collection("tienda").onSnapshot(function (querySnapshot) {
+                            console.log("cambio en la DB!");
+                        });
+                        */
+
         }
     }, [dispatch, db, usuario]) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
 

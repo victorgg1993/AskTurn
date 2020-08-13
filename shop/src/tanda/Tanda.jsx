@@ -1,13 +1,10 @@
 import './tanda.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useFirebaseApp, useUser } from 'reactfire';
-import { useSelector, useDispatch } from 'react-redux';  // activar cuando no esté el debug activo
-import { addTicket } from '../redux/actions';
 import 'firebase/auth';
 import 'firebase/firestore';
-//import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 
 const Tanda = () => {
 
@@ -15,12 +12,26 @@ const Tanda = () => {
 
     const modulos_firebase = useFirebaseApp();
     const db = modulos_firebase.firestore();
-    const dispatch = useDispatch();
     const usuario = useUser();
 
-    const arr_tickets = useSelector(store => store.funcionTickets);
     const [estado_tanda, setEstadoTanda] = useState(false);
-    const [n_ticket, setIndiceTicket] = useState(0);
+    let ticket_tmp = [];
+
+    // leemos la DB cuando hayan cambios
+    let cerrar_listener = db.collection(`tienda/${usuario.email}/ticket`)
+        .onSnapshot(function () {
+            console.log("Cambios en la DB! (tienda)");
+
+            const ref_tienda = db.collection(`tienda/` + usuario.email + `/ticket`);
+
+            ref_tienda.doc(`ticket_` + mirar_id_url()).get().then(
+                (snapshot) => {
+                    updateDataUI(snapshot.data(), estado_tanda);
+                    ticket_tmp = snapshot.data();
+                }
+            );
+        });
+
 
     const mirar_id_url = () => {
         let current_url = new URL(window.location.href);
@@ -28,33 +39,38 @@ const Tanda = () => {
         return (search_params.get('id'));
     };
 
-    useEffect(() => {
-        console.log("useEffect tanda");
-
-        let id_url = mirar_id_url();
-        setIndiceTicket(id_url);
+    const updateDataUI = (ticket, e_tanda) => {
 
         let botones = ['btn_stop', 'btn_anterior', 'btn_siguiente'];
 
         botones.map( // activamos / desactivamos cada botón en función del estado de la tanda
             (elemento) => {
-                document.getElementById(elemento).disabled = (!estado_tanda);
+
+                let tmp_btns = document.getElementById(elemento);
+
+                if (tmp_btns != null) {
+                    tmp_btns.disabled = (!e_tanda);
+                }
             }
         );
 
-        document.getElementById('btn_pause_start_tanda').innerText = (estado_tanda ? "Pause" : "Start");
+        let tmp_btn_ps_tanda = document.getElementById('btn_pause_start_tanda');
 
-        arr_tickets.map((elemento, indice) => {
-            if (indice == id_url) {
-                document.getElementById('id_texto_n_actual').innerText = elemento.n_tanda_curso;
-                document.getElementById('id_texto_n_total').innerText = elemento.n_total_clientes;
-            }
-        });
+        if (tmp_btn_ps_tanda != null) {
+            tmp_btn_ps_tanda.innerText = (e_tanda ? "Pause" : "Start");
+        }
 
-    }, [arr_tickets, estado_tanda]) // el segundo parámetro está por esto: https://stackoverflow.com/questions/53070970/infinite-loop-in-useeffect#answer-53074436
+        let tmp_txt_n_actual = document.getElementById('id_texto_n_actual');
+        let tmp_txt_n_total = document.getElementById('id_texto_n_total');
 
+        if (ticket !== undefined) {
+            tmp_txt_n_actual.innerText = ticket.n_tanda_curso;
+            tmp_txt_n_total.innerText = ticket.n_total_clientes;
+        }
+    }
 
     const updateDataTicket = (ticket) => {
+
         const ref_tienda = db.collection(`tienda/` + usuario.email + `/ticket`);
 
         ref_tienda.doc(`ticket_` + mirar_id_url()).set({
@@ -65,45 +81,54 @@ const Tanda = () => {
             n_total_clientes: ticket.n_total_clientes,
             nombre: ticket.nombre,
         });
+
     }
 
     const handler_start_pause = (evento) => {
         evento.preventDefault(); //evento.stopPropagation();
+
         setEstadoTanda(!estado_tanda);
 
         let obj_boton = document.getElementById('btn_pause_start_tanda');
         (estado_tanda ? obj_boton.innerText = "Pause" : obj_boton.innerText = "Start");
+
     }
 
     const handler_stop = (evento) => {
         evento.preventDefault(); //evento.stopPropagation();
 
-        arr_tickets[n_ticket].activo = false;
-        arr_tickets[n_ticket].date_final = firebase.firestore.Timestamp.fromDate(new Date()); // la fecha final es al darle a stop
+        ticket_tmp.activo = false;
+        ticket_tmp.date_final = firebase.firestore.Timestamp.fromDate(new Date()); // la fecha final es al darle a stop
+        updateDataTicket(ticket_tmp);
 
-        updateDataTicket(arr_tickets[n_ticket]);
+        cerrar_listener();
         history.push('/panel');
     }
 
     const handler_anterior = (evento) => {
         evento.preventDefault(); //evento.stopPropagation();
 
-        if (arr_tickets[n_ticket].n_tanda_curso > 1) {
-            arr_tickets[n_ticket].n_tanda_curso--;
-            dispatch(addTicket(arr_tickets));
-            // enviar por firebase
-            updateDataTicket(arr_tickets[n_ticket]);
+        console.log("anterior ticket_tmp : ", ticket_tmp);
+
+        if (ticket_tmp !== undefined) {
+            if (ticket_tmp.n_tanda_curso > 1) {
+                ticket_tmp.n_tanda_curso--;
+                updateDataTicket(ticket_tmp);   // enviar por firebase
+            }
         }
     }
 
     const handler_siguiente = (evento) => {
         evento.preventDefault(); //evento.stopPropagation();
 
-        if (arr_tickets[n_ticket].n_tanda_curso < arr_tickets[n_ticket].n_total_clientes) {
-            arr_tickets[n_ticket].n_tanda_curso++;
-            dispatch(addTicket(arr_tickets));
-            // enviar por firebase
-            updateDataTicket(arr_tickets[n_ticket]);
+        console.log("siguiente ticket tmp : ", ticket_tmp);
+
+        if (ticket_tmp !== undefined) {
+
+            if (ticket_tmp.n_tanda_curso < ticket_tmp.n_total_clientes) {
+                ticket_tmp.n_tanda_curso++;
+                updateDataTicket(ticket_tmp);   // enviar por firebase
+            }
         }
     }
 

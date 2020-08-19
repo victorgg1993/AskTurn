@@ -22,7 +22,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "reactfire": "^2.0.0-alpha.3",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "uuid": "^8.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

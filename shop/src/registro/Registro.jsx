@@ -6,6 +6,8 @@ import { useFirebaseApp } from 'reactfire';
 import { useHistory } from "react-router-dom";
 import * as actions from '../redux/actions';
 import { useSelector, useDispatch } from 'react-redux';
+const { v1: uuidv1 } = require('uuid');
+
 
 
 export default (props) => {
@@ -19,10 +21,10 @@ export default (props) => {
 
     const [texto_mensaje, setMensaje] = useState(''); // tira mensajes de error, aviso, etc
 
-    const nom_usuari = useSelector(store => store.nombre_usuario);
-    const email = useSelector(store => store.email);
-    const password = useSelector(store => store.password);
-    const password_repetit = useSelector(store => store.password_repe);
+    const [nom_usuari, setNom_usuari] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [password_repetit, setPassword_repetit] = useState('');
 
     const esta_vacio = (dato) => {
         if (dato === "" || dato == null) {
@@ -52,14 +54,16 @@ export default (props) => {
         }
         else {
             // creamos usuario
+            
             await modulos_firebase.auth().createUserWithEmailAndPassword(email, password).then(
                 () => {
                     // creamos estructura de datos para ese usuario
                     const ref_tienda = db.collection('tienda');
-                    ref_tienda.doc(email).set({
-                        email: email,
-                        nombre: nom_usuari,
-                    });
+                        ref_tienda.doc(email).set({
+                            email: email,
+                            nombre: nom_usuari,
+                            uuid: uuidv1(),
+                        });
                 }
             ).catch(
                 () => {
@@ -83,22 +87,22 @@ export default (props) => {
 
             <p>
                 <label htmlFor="usuario">Nombre de usuario:</label>
-                <input type="text" id="usuario" onChange={(evento) => dispatch(actions.darNombreUsuario(evento.target.value))} />
+                <input type="text" id="usuario" onChange={(evento) => setNom_usuari(evento.target.value)} />
             </p>
 
             <p>
                 <label htmlFor="email">Correo electrónico:</label>
-                <input type="email" id="email" onChange={(evento) => dispatch(actions.darEmail(evento.target.value))} />
+                <input type="email" id="email" onChange={(evento) => setEmail(evento.target.value)} />
             </p>
 
             <p>
                 <label htmlFor="password">Password:</label>
-                <input type="password" id="password" onChange={(evento) => dispatch(actions.darPassword(evento.target.value))} />
+                <input type="password" id="password" onChange={(evento) => setPassword(evento.target.value)} />
             </p>
 
             <p>
                 <label htmlFor="password_repetit">Repite password:</label>
-                <input type="password" id="password_repetit" onChange={(evento) => dispatch(actions.darPasswordRepetido(evento.target.value))} />
+                <input type="password" id="password_repetit" onChange={(evento) => setPassword_repetit(evento.target.value)} />
             </p>
 
             <p>

@@ -18,11 +18,11 @@ const Tanda = () => {
     let ticket_tmp = [];
 
     // leemos la DB cuando hayan cambios
-    let cerrar_listener = db.collection(`tienda/${usuario.email}/ticket`)
+    let cerrar_listener = db.collection(`tienda/${usuario.uid}/ticket`)
         .onSnapshot(function () {
             console.log("Cambios en la DB! (tienda)");
 
-            const ref_tienda = db.collection(`tienda/` + usuario.email + `/ticket`);
+            const ref_tienda = db.collection(`tienda/` + usuario.uid + `/ticket`);
 
             ref_tienda.doc(`ticket_` + mirar_id_url()).get().then(
                 (snapshot) => {
@@ -71,7 +71,7 @@ const Tanda = () => {
 
     const updateDataTicket = (ticket) => {
 
-        const ref_tienda = db.collection(`tienda/` + usuario.email + `/ticket`);
+        const ref_tienda = db.collection(`tienda/` + usuario.uid + `/ticket`);
 
         ref_tienda.doc(`ticket_` + mirar_id_url()).set({
             activo: ticket.activo,

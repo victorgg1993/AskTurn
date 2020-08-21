@@ -23,12 +23,12 @@ const Panel = () => {
     const usuario = useUser();
     const db = modulos_firebase.firestore();
 
-/*
-    let cerrar_listener = db.collection(`tienda/${usuario.email}/ticket`)
-        .onSnapshot(function () {
-            console.log("Cambios en la DB! (panel)");
-        });
-        */
+    /*
+        let cerrar_listener = db.collection(`tienda/${usuario.uid}/ticket`)
+            .onSnapshot(function () {
+                console.log("Cambios en la DB! (panel)");
+            });
+            */
 
 
     const logout = async (e) => {
@@ -48,7 +48,7 @@ const Panel = () => {
         let modal = document.getElementById("id_modal_crear_tanda");
         let nombre_tanda = document.getElementById("id_nombre_tanda").value;
 
-        const ref_tienda = db.collection(`tienda/${usuario.email}/ticket`);
+        const ref_tienda = db.collection(`tienda/${usuario.uid}/ticket`);
 
         ref_tienda.doc(`ticket_` + n_tickets).set({
             activo: true,
@@ -83,7 +83,7 @@ const Panel = () => {
             let respuesta = window.confirm("Vas a eliminar la tanda. Aceptas?");
 
             if (respuesta === true) {
-                db.collection(`tienda/` + usuario.email + `/ticket`).doc(`ticket_` + puntero.selectedIndex).delete()
+                db.collection(`tienda/` + usuario.uid + `/ticket`).doc(`ticket_` + puntero.selectedIndex).delete()
                     .then(function () {
                         window.location.reload();
                     })
@@ -118,7 +118,7 @@ const Panel = () => {
 
             dispatch(flushTicket()); // vaciamos el array para tener los más nuevos de la DB
 
-            db.collection('tienda/' + usuario.email + '/ticket').get().then(
+            db.collection('tienda/' + usuario.uid + '/ticket').get().then(
                 (snapshot) => {
 
                     setNumTickets(snapshot.size); // apuntamos el número de tickets que hay ( usado en crear_tanda() )

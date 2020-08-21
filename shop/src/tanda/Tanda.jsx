@@ -108,8 +108,6 @@ const Tanda = () => {
     const handler_anterior = (evento) => {
         evento.preventDefault(); //evento.stopPropagation();
 
-        console.log("anterior ticket_tmp : ", ticket_tmp);
-
         if (ticket_tmp !== undefined) {
             if (ticket_tmp.n_tanda_curso > 1) {
                 ticket_tmp.n_tanda_curso--;
@@ -120,8 +118,6 @@ const Tanda = () => {
 
     const handler_siguiente = (evento) => {
         evento.preventDefault(); //evento.stopPropagation();
-
-        console.log("siguiente ticket tmp : ", ticket_tmp);
 
         if (ticket_tmp !== undefined) {
 

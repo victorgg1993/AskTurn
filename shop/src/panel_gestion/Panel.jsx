@@ -54,8 +54,8 @@ const Panel = () => {
             activo: true,
             date_final: firebase.firestore.Timestamp.fromDate(new Date()),
             date_inicio: firebase.firestore.Timestamp.fromDate(new Date()),
-            n_tanda_curso: 1,
-            n_total_clientes: 2,
+            n_tanda_curso: 0,
+            n_total_clientes: 0,
             nombre: nombre_tanda,
         }).then(
             () => {

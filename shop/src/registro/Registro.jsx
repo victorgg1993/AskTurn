@@ -1,8 +1,7 @@
 //import React, { useState, useContext } from 'react';
 import React, { useState } from 'react';
 import 'firebase/auth';
-//import { useFirebaseApp, useUser } from 'reactfire';
-import { useFirebaseApp } from 'reactfire';
+import { useFirebaseApp, useUser } from 'reactfire';
 import { useHistory } from "react-router-dom";
 import * as actions from '../redux/actions';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,7 +15,7 @@ export default (props) => {
 
     const history = useHistory();
     const modulos_firebase = useFirebaseApp();
-    //const usuario = useUser();
+    const usuario = useUser();
     const db = modulos_firebase.firestore();
 
     const [texto_mensaje, setMensaje] = useState(''); // tira mensajes de error, aviso, etc
@@ -54,15 +53,15 @@ export default (props) => {
         }
         else {
             // creamos usuario
-            
+
             await modulos_firebase.auth().createUserWithEmailAndPassword(email, password).then(
-                () => {
+                (objeto) => {
                     // creamos estructura de datos para ese usuario
+
                     const ref_tienda = db.collection('tienda');
-                        ref_tienda.doc(email).set({
+                        ref_tienda.doc(objeto.user.uid).set({
                             email: email,
                             nombre: nom_usuari,
-                            uuid: uuidv1(),
                         });
                 }
             ).catch(

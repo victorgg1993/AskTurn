@@ -62,10 +62,12 @@ const Tanda = () => {
 
         let tmp_txt_n_actual = document.getElementById('id_texto_n_actual');
         let tmp_txt_n_total = document.getElementById('id_texto_n_total');
+        let tmp_txt_titulo_tanda = document.getElementById('id_titulo_tanda');
 
         if (ticket !== undefined) {
             tmp_txt_n_actual.innerText = ticket.n_tanda_curso;
             tmp_txt_n_total.innerText = ticket.n_total_clientes;
+            tmp_txt_titulo_tanda.innerText = "Nombre ticket: " + ticket.nombre;
         }
     }
 
@@ -130,6 +132,8 @@ const Tanda = () => {
 
     return (
         <div>
+
+            <h2 id="id_titulo_tanda" ></h2>
 
             <p>
                 Actual:

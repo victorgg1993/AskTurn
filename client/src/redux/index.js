@@ -1,10 +1,10 @@
 import { createStore, combineReducers } from 'redux';
 import produce from 'immer';
-import { 
-          DAR_EMAIL, DAR_PASSW, DAR_PASSW_REP, 
-          DAR_NOMBRE_USER, ADD_TICKETS, FLUSH_TICKETS, 
-          DAR_ESTADO_TANDA 
-        } from './actions';
+import {
+  DAR_EMAIL, DAR_PASSW, DAR_PASSW_REP,
+  DAR_NOMBRE_USER, ADD_TICKETS, FLUSH_TICKETS,
+  DAR_ESTADO_TANDA
+} from './actions';
 
 const initialState = {
   nombre_usuario: "",
@@ -44,12 +44,12 @@ function actions(state = initialState, action) {
         nombre_usuario: action.dada
       };
 
-      case DAR_ESTADO_TANDA:
-        console.log("actions redux tanda: ", action.dada);
-        return {
-          ...state,
-          estado_tanda: action.dada
-        };
+    case DAR_ESTADO_TANDA:
+      console.log("actions redux tanda: ", action.dada);
+      return {
+        ...state,
+        estado_tanda: action.dada
+      };
 
     default:
       return state;
@@ -63,13 +63,15 @@ function funcionTickets(prevState = [], action) {
       //return produce(prevState, draftState => { draftState.push(action); })
       return produce(prevState, draftState => {
         draftState.push(
-          { 
+          {
             activo: action.dada.activo,
             date_final: action.dada.date_final,
             date_inicio: action.dada.date_inicio,
+            id_ticket: action.dada.id_ticket,
+            id_tienda: action.dada.id_tienda,
             n_tanda_curso: action.dada.n_tanda_curso,
             n_total_clientes: action.dada.n_total_clientes,
-            nombre: action.dada.nombre 
+            nombre: action.dada.nombre
           });
       })
 

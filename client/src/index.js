@@ -32,7 +32,7 @@ ReactDOM.render(
 
             <Route path="/" exact>
               <Suspense fallback={'Conectando...'}>
-                <div className="div_buscador">
+                <div className="div_panel">
                   <Buscador />
                 </div>
               </Suspense>

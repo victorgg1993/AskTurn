@@ -8,9 +8,13 @@ import 'firebase/firestore';
 import firebase from 'firebase/app';
 import { useSelector, useDispatch } from 'react-redux';  // activar cuando no esté el debug activo
 import { addTicket, flushTicket } from '../redux/actions';
+import { initCookie, setCookie, getCookie } from '../Cookies/Cookies';
+
 //import { useCollection } from "react-firebase-hooks/firestore";
 
-const Panel = () => {
+const { v1: uuidv1 } = require('uuid');
+
+const Buscador = () => {
 
     const array_tickets = useSelector(store => store.funcionTickets);
 
@@ -22,10 +26,12 @@ const Panel = () => {
     const db = modulos_firebase.firestore();
 
 
+    initCookie();
+
 
     const entrar_tanda = (evento, index) => {
         evento.stopPropagation();
-        history.push('/ticket?tienda=' + array_tickets[index].id_tienda + '+ticket=' + array_tickets[index].id_ticket);
+        history.push('/ticket?tienda=' + array_tickets[index].id_tienda + '&ticket=' + array_tickets[index].id_ticket);
     }
 
 
@@ -76,7 +82,7 @@ const Panel = () => {
 
     return (
         <div>
-            <p>Bienvenido!</p>
+            <p>Cliente</p>
 
             <p>
                 <label>Elige un ticket:</label>
@@ -103,4 +109,4 @@ const Panel = () => {
 }
 
 
-export default Panel;
+export default Buscador;

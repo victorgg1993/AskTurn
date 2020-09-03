@@ -95,4 +95,5 @@ export default createStore(
 */
 
 const todoApp = combineReducers({ actions, funcionTickets })
-export default createStore(todoApp, {}, window.__REDUX_DEVTOOLS_EXTENSION__());
+export default createStore(todoApp, {});
+///export default createStore(todoApp, {}, window.__REDUX_DEVTOOLS_EXTENSION__());

@@ -15,23 +15,42 @@ const Tanda = () => {
     const usuario = useUser();
 
     const [estado_tanda, setEstadoTanda] = useState(false);
+    const [num_tickets, setNumTickets] = useState(0);
     let ticket_tmp = [];
 
     // leemos la DB cuando hayan cambios
     let cerrar_listener = db.collection(`tienda/${usuario.uid}/ticket`)
         .onSnapshot(function () {
-            console.log("Cambios en la DB! (tienda)");
+            console.log("Cambios DB (tienda)");
 
             const ref_tienda = db.collection(`tienda/` + usuario.uid + `/ticket`);
 
             ref_tienda.doc(`ticket_` + mirar_id_url()).get().then(
                 (snapshot) => {
-                    updateDataUI(snapshot.data(), estado_tanda);
                     ticket_tmp = snapshot.data();
+                    ticket_tmp.e_tanda = estado_tanda;
+
+                    const ref_clientes_actuales = db.collection("tienda/" + usuario.uid + "/ticket/ticket_" + mirar_id_url() + "/clientes");
+                    ref_clientes_actuales.get().then(
+                        (snapshot) => {
+                            ticket_tmp.n_total_clientes = snapshot.size;
+                        }).then(() => {
+                            updateDataUI(ticket_tmp);
+                        })
                 }
             );
         });
 
+
+
+    const get_num_clientes = () => {
+        let x = 0;
+        const ref_clientes_actuales = db.collection("tienda/" + usuario.uid + "/ticket/ticket_" + mirar_id_url() + "/clientes");
+        ref_clientes_actuales.get().then(
+            (snapshot) => {
+                setNumTickets(snapshot.size);
+            })
+    };
 
     const mirar_id_url = () => {
         let current_url = new URL(window.location.href);
@@ -39,9 +58,11 @@ const Tanda = () => {
         return (search_params.get('id'));
     };
 
-    const updateDataUI = (ticket, e_tanda) => {
+    const updateDataUI = (ticket) => {
 
         let botones = ['btn_stop', 'btn_anterior', 'btn_siguiente'];
+
+        setNumTickets(ticket.n_total_clientes);
 
         botones.map( // activamos / desactivamos cada botón en función del estado de la tanda
             (elemento) => {
@@ -49,7 +70,7 @@ const Tanda = () => {
                 let tmp_btns = document.getElementById(elemento);
 
                 if (tmp_btns != null) {
-                    tmp_btns.disabled = (!e_tanda);
+                    tmp_btns.disabled = (!ticket.e_tanda);
                 }
             }
         );
@@ -57,7 +78,7 @@ const Tanda = () => {
         let tmp_btn_ps_tanda = document.getElementById('btn_pause_start_tanda');
 
         if (tmp_btn_ps_tanda != null) {
-            tmp_btn_ps_tanda.innerText = (e_tanda ? "Pause" : "Start");
+            tmp_btn_ps_tanda.innerText = (ticket.e_tanda ? "Pause" : "Start");
         }
 
         let tmp_txt_n_actual = document.getElementById('id_texto_n_actual');
@@ -73,18 +94,27 @@ const Tanda = () => {
 
     const updateDataTicket = (ticket) => {
 
-        const ref_tienda = db.collection(`tienda/` + usuario.uid + `/ticket`);
+        console.log("update data ticket");
 
-        ref_tienda.doc(`ticket_` + mirar_id_url()).set({
-            activo: ticket.activo,
-            date_final: ticket.date_final,
-            date_inicio: ticket.date_inicio,
-            n_tanda_curso: ticket.n_tanda_curso,
-            n_total_clientes: ticket.n_total_clientes,
-            nombre: ticket.nombre,
-        });
-
+        const ref_clientes_actuales = db.collection("tienda/" + usuario.uid + "/ticket/ticket_" + mirar_id_url() + "/clientes");
+        ref_clientes_actuales.get().then(
+            () => {
+                get_num_clientes();
+            }
+        ).then(
+            () => {
+                const ref_tienda = db.collection(`tienda/` + usuario.uid + `/ticket`);
+                ref_tienda.doc(`ticket_` + mirar_id_url()).set({
+                    activo: ticket.activo,
+                    date_final: ticket.date_final,
+                    date_inicio: ticket.date_inicio,
+                    n_tanda_curso: ticket.n_tanda_curso,
+                    nombre: ticket.nombre,
+                });
+            }
+        );
     }
+
 
     const handler_start_pause = (evento) => {
         evento.preventDefault(); //evento.stopPropagation();
@@ -93,7 +123,6 @@ const Tanda = () => {
 
         let obj_boton = document.getElementById('btn_pause_start_tanda');
         (estado_tanda ? obj_boton.innerText = "Pause" : obj_boton.innerText = "Start");
-
     }
 
     const handler_stop = (evento) => {
@@ -123,7 +152,7 @@ const Tanda = () => {
 
         if (ticket_tmp !== undefined) {
 
-            if (ticket_tmp.n_tanda_curso < ticket_tmp.n_total_clientes) {
+            if (ticket_tmp.n_tanda_curso < num_tickets) {
                 ticket_tmp.n_tanda_curso++;
                 updateDataTicket(ticket_tmp);   // enviar por firebase
             }

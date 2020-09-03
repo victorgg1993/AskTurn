@@ -55,7 +55,6 @@ const Panel = () => {
             date_final: firebase.firestore.Timestamp.fromDate(new Date()),
             date_inicio: firebase.firestore.Timestamp.fromDate(new Date()),
             n_tanda_curso: 0,
-            n_total_clientes: 0,
             nombre: nombre_tanda,
         }).then(
             () => {
@@ -158,7 +157,7 @@ const Panel = () => {
                 // si lo hizo, le mostramos un mensaje de bienvenida
                 usuario &&
                 <div>
-                    <p>Bienvenido!</p>
+                    <p>Tienda</p>
 
 
 

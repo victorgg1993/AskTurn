@@ -1,62 +1,42 @@
-import './index.css';
-import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import * as serviceWorker from './serviceWorker';
+import 'typeface-roboto';
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-
-import { Provider } from 'react-redux';
-import store from './redux';
-
+// nuevo
+import React, { Suspense } from 'react';
 import { FirebaseAppProvider } from 'reactfire';
 import firebaseConfig from './configuracion_firebase';
+import { Provider } from 'react-redux';
+import store from './redux';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-
-import Buscador from './Buscador/Buscador';
-import VentanaTicket from './VentanaTicket/VentanaTicket';
-
-
-
-
-
-
+import Welcome from './components/Welcome/Welcome';
+import Shops from './components/Shops/Shops';
+import ShopsDashboard from './components/ShopsDashboard/ShopsDashboard';
 
 ReactDOM.render(
   <React.StrictMode>
-    
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <Provider store={store}>
+
         <Router>
-          <Switch>
 
+          <Suspense fallback={'Conectando...'}>
+            <Route path="/" exact component={Welcome} />
+          </Suspense>
 
-            <Route path="/" exact>
-              <Suspense fallback={'Conectando...'}>
-                <div className="div_panel">
-                  <Buscador />
-                </div>
-              </Suspense>
-            </Route>
+          <Suspense fallback={'Conectando...'}>
+            <Route path="/shops" exact component={Shops} />
+          </Suspense>
 
+          <Suspense fallback={'Conectando...'}>
+            <Route path="/ticket/:shopId/:id_tienda/:id_ticket" exact component={ShopsDashboard} />
+          </Suspense>
 
-            <Route path="/ticket">
-              <Suspense fallback={'Conectando...'}>
-                <div className="div_VentanaTicket">
-                  <VentanaTicket />
-                </div>
-              </Suspense>
-            </Route>
-
-
-          </Switch>
         </Router>
+
       </Provider>
     </FirebaseAppProvider>
-    
   </React.StrictMode>,
   document.getElementById('root')
 );
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+

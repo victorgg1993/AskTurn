@@ -1,0 +1,27 @@
+.sec-button {
+    background:#cfcece;
+    height:80px;
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    text-decoration: none;
+    height: 45px;
+    width: 280px;
+    margin-top: 18px;
+    font-weight: 350;
+    font-size: 30px;
+    font-style: italic;
+    color: #ECECEC;
+    background-color:  #383838;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ayuda al usuario para saber
+   que el botón es seleccionable */
+.button:hover{
+    cursor: pointer;
+}

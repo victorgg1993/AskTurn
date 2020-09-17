@@ -11,10 +11,15 @@ import store from './redux';
 import { FirebaseAppProvider } from 'reactfire';
 import firebaseConfig from './configuracion_firebase';
 
-import Login from './login/Login'; // ventana de login del usuario
-import Registro from './registro/Registro'; // ventana de registro de usuario
-import Panel from './panel_gestion/Panel'; // panel que verá el usuario una vez loggeado
+import Home from './components/Home/Home';
+import Login from './components/Login/Login'; // ventana de login del usuario
+// import Login from './login/Login'; // ventana de login del usuario
+import Register from './components/Register/Register';
+// import Registro from './registro/Registro'; // ventana de registro de usuario
+// import Panel from './panel_gestion/Panel'; // panel que verá el usuario una vez loggeado
+import PanelGestion from './components/PanelGestion/PanelGestion'; // panel que verá el usuario una vez loggeado
 import Tanda from './tanda/Tanda'; // tanda ticket actual
+
 
 
 ReactDOM.render(
@@ -23,43 +28,42 @@ ReactDOM.render(
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <Provider store={store}>
         <Router>
-          <Switch>
-
-            <Route path="/" exact>
+           <Route path="/" exact>
               <Suspense fallback={'Conectando...'}>
-                <div className="div_login">
-                  <Login />
-                </div>
+                  <Home />
               </Suspense>
             </Route>
 
-            <Route path="/register">
+            <Route path="/login" exact>
+              <Suspense fallback={'Conectandoooo...'}>
+                  <Login />
+              </Suspense>
+            </Route>
+
+            <Route path="/register" exact>
               <Suspense fallback={'Conectando...'}>
                 <div className="div_registro">
-                  <Registro />
+                  <Register/>
                 </div>
               </Suspense>
             </Route>
 
-            <Route path="/panel">
+            <Route path="/panel" exact>
               <Suspense fallback={'Conectando...'}>
                 <div className="div_panel_gestion">
-                  <Panel />
+                  <PanelGestion />
                 </div>
               </Suspense>
             </Route>
 
-            <Route path="/tanda">
+            <Route path="/tanda" exact>
               <Suspense fallback={'Conectando...'}>
                 <div className="div_panel_tanda">
                   <Tanda />
                 </div>
               </Suspense>
             </Route>
-
-
-          </Switch>
-        </Router>
+       </Router>
       </Provider>
     </FirebaseAppProvider>
     

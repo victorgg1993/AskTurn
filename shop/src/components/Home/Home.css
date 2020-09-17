@@ -1,0 +1,45 @@
+body {
+    background: #383838;
+ }
+ 
+.home-center {
+    position: relative;
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/*LOGO*/
+.logoHome{
+    width: 35%;
+}
+
+/*BUTTON*/
+#button-registre{
+    text-decoration: none;
+    padding: 5px 20px;
+    font-weight: 300;
+    font-size: 30px;
+    color: #000;
+    background-color:  #fffd3a;
+    border-radius: 5px;
+    text-transform: uppercase;
+    margin-top: 50px;
+}
+
+/*PARRAFO*/
+.register-p {
+    font-size: 25px;
+    color: #ECECEC;
+    font-weight: 300;
+    margin-top: 25px;
+}
+  
+#link-login-home {
+    color: #fffd3a;
+    text-transform: capitalize;
+}
+   
+    

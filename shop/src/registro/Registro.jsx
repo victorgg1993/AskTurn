@@ -77,7 +77,6 @@ export default (props) => {
         }
     }
 
-
     return (
         <div>
             <p>Ventana de registro</p>

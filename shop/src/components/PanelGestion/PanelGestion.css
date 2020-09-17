@@ -1,0 +1,79 @@
+/*ESTILOS PANEL-TIENDA*/
+
+body {
+    background-color: #383838;
+    }
+    
+    .container {
+    background-color: #ECECEC;
+    width: 95%;
+    height: 450px;
+    display: flex;
+    margin: 2em auto;
+    margin-top: 15%;
+    }
+    
+    .logoPanel {
+    max-width: 60%;
+    }
+    
+    .container-logo{
+    width: 20%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #2e2e2e;
+    padding: 2rem 0;
+    }
+
+    .container-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem;
+    }
+
+    .title-shop {
+    text-transform: uppercase;
+    font-size: 30px;
+    color: #383838;
+    }
+
+    .ticket {
+    font-size: 25px;
+    }
+
+    .panel-management{
+    display: flex;
+    flex-direction: column;
+    }
+
+    #id_lista_tickets {
+    width: 69vh;
+    height: 12vh;
+    }
+
+    .button-panel {
+    text-decoration: none;
+    padding: 6px 18px;
+    font-weight: 300;
+    font-size: 20px;
+    color: #ECECEC;
+    background:#2e2e2e;
+    border-radius: 8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-left: 10px;
+    }
+
+    .logout{
+    text-decoration: none;
+    padding: 6px 18px;
+    font-weight: 300;
+    font-size: 20px;
+    color: #ECECEC;
+    background:#2e2e2e;
+    border-radius: 5px;
+    text-transform: uppercase;
+    }

@@ -16,9 +16,10 @@ import Login from './components/Login/Login'; // ventana de login del usuario
 // import Login from './login/Login'; // ventana de login del usuario
 import Register from './components/Register/Register';
 // import Registro from './registro/Registro'; // ventana de registro de usuario
-// import Panel from './panel_gestion/Panel'; // panel que verá el usuario una vez loggeado
+import Panel from './panel_gestion/Panel'; // panel que verá el usuario una vez loggeado
 import PanelGestion from './components/PanelGestion/PanelGestion'; // panel que verá el usuario una vez loggeado
-import Tanda from './tanda/Tanda'; // tanda ticket actual
+// import Tanda from './tanda/Tanda'; // tanda ticket actual
+import Tanda from './components/Tanda/Tanda'; // tanda ticket actual
 
 
 
@@ -51,7 +52,7 @@ ReactDOM.render(
             <Route path="/panel" exact>
               <Suspense fallback={'Conectando...'}>
                 <div className="div_panel_gestion">
-                  <PanelGestion />
+                  <PanelGestion/>
                 </div>
               </Suspense>
             </Route>

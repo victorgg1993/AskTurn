@@ -142,11 +142,10 @@ export default function PanelGestion() {
     <div>
       {
         // si el usuario no se ha loggeado, lo enviamos a hacerlo
-        !usuario && (
+        !usuario && 
           <div>
             <Redirect to={"/"} />
           </div>
-        )
       }
 
       {
@@ -159,6 +158,22 @@ export default function PanelGestion() {
 
             <div className="container-panel">
               <h1 className="title-shop">Tienda</h1>
+
+              <div id="id_modal_crear_tanda" className="modal">
+            <div class="modal-content">
+                <form>
+                    <label class="name-turn">Nombre de la tanda:</label>
+                    <input type="text" className="id_nombre_tanda" id="id_nombre_tanda"></input><br />
+                </form>
+                <div class="buttons-modal">
+                    <button class="button-modal" onClick={onClick_aceptar_tanda}>Aceptar</button>
+                    <button class="button-modal" onClick={onClick_cancelar_tanda}>Cancelar</button>
+                </div>
+        </div>
+    </div>
+
+
+
               <div className="panel-management">
                 <label className="ticket">Elige un ticket:</label>
                 <select id="id_lista_tickets" size="3">
@@ -179,9 +194,13 @@ export default function PanelGestion() {
                 <button onClick={borrar_tanda} className="button-panel">borrar tanda</button>
               </div>
               <div>
-                <Link className="logout" onClick={logout} to="/">
-                  Logout
-                </Link>
+
+
+              <button onClick={logout} className="button-panel">Logout<Link to="/"></Link></button>
+
+                
+                    
+
               </div>
             </div>
           </div>

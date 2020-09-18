@@ -31,6 +31,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    width: 80%;
     margin: 2rem;
     }
 
@@ -55,25 +56,89 @@ body {
     }
 
     .button-panel {
+    background-color: #2e2e2e;
+    border: none;
+    color: #ececec;
+    padding: 10px 24px;
+    text-align: center;
     text-decoration: none;
-    padding: 6px 18px;
-    font-weight: 300;
+    display: inline-block;
     font-size: 20px;
-    color: #ECECEC;
-    background:#2e2e2e;
-    border-radius: 8px;
-    text-transform: uppercase;
-    cursor: pointer;
-    margin-left: 10px;
-    }
-
-    .logout{
-    text-decoration: none;
-    padding: 6px 18px;
-    font-weight: 300;
-    font-size: 20px;
-    color: #ECECEC;
-    background:#2e2e2e;
+    margin: 4px 2px;
     border-radius: 5px;
     text-transform: uppercase;
+    cursor: pointer;
     }
+
+
+    /*ESTILOS MODAL*/
+    /* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */ 
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    margin-top: 20%;
+    padding: 5%;
+    border: 1px solid #888;
+    width: 60%;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+.name-turn{
+    font-size: 25px;
+}
+
+.id_nombre_tanda{
+    background: rgb(224, 224, 224);
+    border: 0;
+    width: 25rem;
+    height: 2rem;
+    font-size: 20px;
+}
+
+input:focus, input.form-control:focus {
+    outline:none !important;
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.buttons-modal{
+    padding-top: 1rem;
+}
+
+.button-modal{
+    background-color: #2e2e2e;
+    border: none;
+    color: #ececec;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+} 
